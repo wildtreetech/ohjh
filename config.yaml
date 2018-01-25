@@ -1,9 +1,11 @@
 proxy:
+  service:
+    loadBalancerIP: 35.224.161.135
   https:
     hosts:
-      - ohjh.wtte.ch
+      - notebooks.openhumans.org
     letsencrypt:
-      contactEmail: https-domains@wildtreetech.com
+      contactEmail: accounts+letsencrypt@openhumans.org
 
 hub:
     extraConfig: |
@@ -39,6 +41,6 @@ auth:
   custom:
     className: 'oauthenticator.generic.GenericOAuthenticator'
     config:
-      oauth_callback_url: "https://ohjh.wtte.ch/hub/oauth_callback"
+      oauth_callback_url: "https://notebooks.openhumans.org//hub/oauth_callback"
       token_url: "https://www.openhumans.org/oauth2/token/"
       login_service: "OpenHumans"
