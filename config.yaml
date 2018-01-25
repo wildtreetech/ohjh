@@ -26,15 +26,15 @@ hub:
               return env
       c.JupyterHub.spawner_class = OHKubeSpawner
       c.JupyterHub.authenticator_class = OHAuthenticator
-      c.GenericOAuthenticator.enable_auth_state = True
 
     extraEnv:
         OAUTH2_AUTHORIZE_URL: https://www.openhumans.org/direct-sharing/projects/oauth2/authorize/
         OAUTH2_TOKEN_URL: https://www.openhumans.org/oauth2/token/
         OAUTH2_USERDATA_URL: https://www.openhumans.org/api/direct-sharing/project/exchange-member/
-        JUPYTERHUB_CRYPT_KEY: "089c264dc88caee79c772f3f763b2fd8d277bd62b5a5402604302748665b649d"
 
 auth:
+  state:
+    enabled: true
   type: custom
   custom:
     className: 'oauthenticator.generic.GenericOAuthenticator'
