@@ -1,4 +1,6 @@
 proxy:
+  service:
+    loadBalancerIP: 35.224.161.135
   https:
     hosts:
       - ohjh.wtte.ch
