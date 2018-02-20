@@ -44,3 +44,6 @@ auth:
       oauth_callback_url: "https://notebooks.openhumans.org//hub/oauth_callback"
       token_url: "https://www.openhumans.org/oauth2/token/"
       login_service: "OpenHumans"
+
+singleuser:
+  fsGid: 100
