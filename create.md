@@ -104,16 +104,15 @@ for automatic HTTPS (letsencrypt). If you created a new static IP for this
 deployment make sure to update your DNS records, and modify the `proxy` section
 of `config.yaml`.
 
-Add the JupyterHub helm chart:
+Change into the helm chart's directory and update the dependencies:
 ```
-helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
-helm repo update
+cd ohjh/
+helm dep up
 ```
 
-Now you are ready to instal JupyterHub
+Now you are ready to install the OpenHumans JupyterHub chart:
 ```
-helm install jupyterhub/jupyterhub --version=v0.6.0-baa1618 \
-    --name=ohjhub --namespace=jhub -f config.yaml -f secrets.yaml
+helm upgrade --install --namespace jhub ohjh ohjh --version=v0.1.0 -f secrets.yaml
 ```
 
 To find the external IP of your cluster to setup your domain name and HTTPS:
