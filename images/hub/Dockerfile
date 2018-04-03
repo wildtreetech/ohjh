@@ -10,6 +10,7 @@ RUN apt-get update && \
       libcurl4-openssl-dev \
       libssl-dev \
       build-essential \
+      npm \
       && \
     apt-get purge && apt-get clean
 
@@ -30,15 +31,13 @@ ARG JUPYTERHUB_VERSION=0.8.*
 
 ADD requirements.txt /tmp/requirements.txt
 RUN pip3 install --no-cache-dir \
-         https://github.com/jupyterhub/jupyterhub/archive/50944487628ddc735772e392ed8222080d910bc2.zip#egg=jupyterhub \
-         -r /tmp/requirements.txt
+         https://github.com/jupyterhub/jupyterhub/archive/b26b1bc038029fe6ff790b195591ca48250fdd15.zip#egg=jupyterhub
+RUN pip3 install --no-cache-dir -r /tmp/requirements.txt
 
 ADD jupyterhub_config.py /srv/jupyterhub_config.py
 
 ADD z2jh.py /usr/local/lib/python3.6/dist-packages/z2jh.py
 ADD cull_idle_servers.py /usr/local/bin/cull_idle_servers.py
-# test service
-ADD whoami.py /usr/local/bin/whoami.py
 
 WORKDIR /srv/jupyterhub
 
