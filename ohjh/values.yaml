@@ -1,0 +1,64 @@
+jupyterhub:
+  proxy:
+    service:
+      loadBalancerIP: 35.224.161.135
+    https:
+      hosts:
+        - notebooks.openhumans.org
+      letsencrypt:
+        contactEmail: accounts+letsencrypt@openhumans.org
+
+  hub:
+    services:
+      refresher:
+        admin: true
+        url: http://refresher/
+    image:
+      name: betatim/openhumans-hub
+      tag: v6
+    extraConfig: |
+      from tornado import gen
+      from kubespawner.spawner import KubeSpawner
+      from oauthenticator.generic import GenericOAuthenticator
+
+      class OHAuthenticator(GenericOAuthenticator):
+          @gen.coroutine
+          def pre_spawn_start(self, user, spawner):
+              auth_state = yield user.get_auth_state()
+              spawner.auth_state = auth_state
+
+      class OHKubeSpawner(KubeSpawner):
+          def get_env(self):
+              env = super().get_env()
+              oauth_user = self.auth_state['oauth_user']
+              env['OH_PROJECT_MEMBER_ID'] = oauth_user['project_member_id']
+              return env
+      c.JupyterHub.spawner_class = OHKubeSpawner
+      c.JupyterHub.authenticator_class = OHAuthenticator
+      c.Authenticator.enable_auth_state = True
+
+    extraEnv:
+      OAUTH2_AUTHORIZE_URL: https://www.openhumans.org/direct-sharing/projects/oauth2/authorize/
+      OAUTH2_TOKEN_URL: https://www.openhumans.org/oauth2/token/
+      OAUTH2_USERDATA_URL: https://www.openhumans.org/api/direct-sharing/project/exchange-member/
+      JUPYTERHUB_CRYPT_KEY: 917d71e3604426b4717a91a9dec85148db0cc23b1dbc7ecd671fedc48d0a90d5
+
+  auth:
+    type: custom
+    state:
+      enabled: true
+      cryptoKey: "917d71e3604426b4717a91a9dec85148db0cc23b1dbc7ecd671fedc48d0a90d5"
+    custom:
+      className: 'OHAuthenticator'
+      config:
+        oauth_callback_url: "https://notebooks.openhumans.org//hub/oauth_callback"
+        token_url: "https://www.openhumans.org/oauth2/token/"
+        login_service: "OpenHumans"
+
+  singleuser:
+    image:
+      name: betatim/openhumans-singleuser
+      tag: v1
+    memory:
+      limit: 4G
+      guarantee: 1G
