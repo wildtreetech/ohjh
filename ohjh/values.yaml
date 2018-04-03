@@ -9,6 +9,13 @@ jupyterhub:
         contactEmail: accounts+letsencrypt@openhumans.org
 
   hub:
+    services:
+      refresher:
+        admin: true
+        url: http://refresher/
+    image:
+      name: betatim/openhumans-hub
+      tag: v6
     extraConfig: |
       from tornado import gen
       from kubespawner.spawner import KubeSpawner
@@ -19,18 +26,12 @@ jupyterhub:
           def pre_spawn_start(self, user, spawner):
               auth_state = yield user.get_auth_state()
               spawner.auth_state = auth_state
-              spawner._OH_CLIENT_ID = self.client_id
-              spawner._OH_CLIENT_SECRET = self.client_secret
 
       class OHKubeSpawner(KubeSpawner):
           def get_env(self):
               env = super().get_env()
               oauth_user = self.auth_state['oauth_user']
               env['OH_PROJECT_MEMBER_ID'] = oauth_user['project_member_id']
-              env['OH_ACCESS_TOKEN'] = self.auth_state['access_token']
-              env['OH_CLIENT_ID'] = self._OH_CLIENT_ID
-              env['OH_CLIENT_SECRET'] = self._OH_CLIENT_SECRET
-              env['OH_OAUTH2_TOKEN_URL'] = 'https://www.openhumans.org/oauth2/token/'
               return env
       c.JupyterHub.spawner_class = OHKubeSpawner
       c.JupyterHub.authenticator_class = OHAuthenticator

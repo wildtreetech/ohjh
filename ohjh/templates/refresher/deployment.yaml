@@ -1,0 +1,35 @@
+apiVersion: apps/v1beta2 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: token-refresher
+spec:
+  selector:
+    matchLabels:
+      app: token-refresher
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: token-refresher
+    spec:
+      volumes:
+      - name: hub-secret
+        secret:
+          secretName: hub-secret
+      containers:
+      - name: refresher
+        image: betatim/openhumans-refresher:v2
+        ports:
+        - containerPort: 80
+        env:
+          - name: JUPYTERHUB_API_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: hub-secret
+                key: "services.token.refresher"
+          - name: JUPYTERHUB_API_URL
+            value: http://$(HUB_SERVICE_HOST):$(HUB_SERVICE_PORT)/hub/api
+          - name: JUPYTERHUB_SERVICE_PREFIX
+            value: "/services/refresher/"
+          - name: JUPYTERHUB_SERVICE_URL
+            value: "http://$(REFRESHER_SERVICE_HOST):$(REFRESHER_SERVICE_PORT)/"
