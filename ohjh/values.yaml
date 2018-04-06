@@ -15,7 +15,7 @@ jupyterhub:
         url: http://refresher/
     image:
       name: betatim/openhumans-hub
-      tag: v6
+      tag: v7
     extraConfig: |
       from tornado import gen
       from kubespawner.spawner import KubeSpawner
