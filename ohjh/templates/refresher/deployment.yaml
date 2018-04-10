@@ -16,9 +16,15 @@ spec:
       - name: hub-secret
         secret:
           secretName: hub-secret
+      - name: hub-config
+        configMap:
+          name: hub-config
       containers:
       - name: refresher
-        image: betatim/openhumans-refresher:v2
+        volumeMounts:
+          - mountPath: /etc/jupyterhub/config/
+            name: hub-config
+        image: betatim/openhumans-refresher:v13
         ports:
         - containerPort: 80
         env:

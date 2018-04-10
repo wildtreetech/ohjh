@@ -8,6 +8,6 @@ psycopg2==2.7.3.2
 pycurl==7.43.0
 mwoauth==0.3.2
 globus_sdk[jwt]==1.2.1
-oauthenticator==0.7.2
+https://github.com/jupyterhub/oauthenticator/archive/fce07d4359583e1726c66621e15029785968b1fd.tar.gz
 cryptography==2.0.3
 https://github.com/jupyterhub/kubespawner/archive/86386e8.tar.gz
