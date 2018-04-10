@@ -5,5 +5,5 @@ FROM jupyter/datascience-notebook:65f1c4bea0b2
 ARG JUPYTERHUB_VERSION=0.8.1
 RUN pip install --no-cache jupyterhub==$JUPYTERHUB_VERSION
 
-RUN pip install git+https://github.com/betatim/jhoauth-refresh@752037ac222154041ad854229f3caf7d7c327452
+RUN pip install git+https://github.com/OpenHumans/jhoauth-refresh@3ce0b6f7d42f0416cf056dcb887cfefb62b8b513
 RUN jupyter serverextension enable --py jhoauthrefresh --sys-prefix
