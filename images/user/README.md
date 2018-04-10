@@ -29,4 +29,4 @@ for tags that are already used.
 
 Now push the image to docker hub: `docker push betatim/openhumans-singleuser:vXXX`.
 
-Update the singleuser image entry in `config.yaml` and run `helm deploy ...`.
+Update the singleuser image entry in `ohjh/values.yaml` and run `helm upgrade ...`.
