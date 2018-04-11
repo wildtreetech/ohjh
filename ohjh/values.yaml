@@ -58,7 +58,7 @@ jupyterhub:
   singleuser:
     image:
       name: betatim/openhumans-singleuser
-      tag: v4
+      tag: v5
     memory:
       limit: 4G
       guarantee: 1G
