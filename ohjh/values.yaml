@@ -56,9 +56,13 @@ jupyterhub:
         login_service: "OpenHumans"
 
   singleuser:
+    lifecycleHooks:
+      postStart:
+        exec:
+          command: ["gitpuller", "https://github.com/OpenHumans/ohjh-example-notebooks", "master", "examples"]
     image:
       name: betatim/openhumans-singleuser
-      tag: v6
+      tag: v7
     memory:
       limit: 4G
       guarantee: 1G
