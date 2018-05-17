@@ -94,7 +94,7 @@ gcloud compute addresses list
 
 [Full guide](https://zero-to-jupyterhub.readthedocs.io/en/v0.5-doc/setup-jupyterhub.html#setup-jupyterhub)
 
-Use the `config.yaml` in this repository. You will need to obtain `secrets.yaml`
+Use the `ohjh/values.yaml` in this repository. You will need to obtain `secrets.yaml`
 somehow, as this is not distributed in this repository.
 
 You should remove (or change) the hostname and https section for a test
@@ -102,7 +102,7 @@ deployment. Read the
 [HTTPS setup details](https://zero-to-jupyterhub.readthedocs.io/en/v0.5-doc/security.html#https)
 for automatic HTTPS (letsencrypt). If you created a new static IP for this
 deployment make sure to update your DNS records, and modify the `proxy` section
-of `config.yaml`.
+of `ohjh/values.yaml`.
 
 Change into the helm chart's directory and update the dependencies:
 ```
