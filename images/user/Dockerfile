@@ -19,5 +19,6 @@ RUN R -e "install.packages(c('stringr', 'tidytext', 'purrr', 'widyr'), repos = '
 # Python packages users like to use
 RUN pip install --no-cache \
        textblob==0.15.1 \
-       emoji==0.5.0
+       emoji==0.5.0 \
+       open-humans-api==0.2.2
 RUN python -m textblob.download_corpora
