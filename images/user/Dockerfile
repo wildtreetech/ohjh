@@ -19,7 +19,7 @@ RUN jupyter serverextension enable --py oh_notebook_importer --sys-prefix
 ENV JH_BUNDLE_REDIRECT http://juno-exploratory.herokuapp.com/shared
 
 RUN pip install --no-cache git+https://github.com/gedankenstuecke/jupyter-bundler-openhumans.git@v0.0.3
-RUN jupyter bundlerextension enable --py oh_bundler
+RUN jupyter bundlerextension enable --py oh_bundler --sys-prefix
 RUN jupyter nbextension install --py oh_bundler --sys-prefix
 RUN jupyter nbextension enable --py oh_bundler --sys-prefix
 
