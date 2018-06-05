@@ -13,6 +13,16 @@ RUN jupyter serverextension enable --py jhoauthrefresh --sys-prefix
 RUN pip install --no-cache git+https://github.com/data-8/nbgitpuller@28fe9b1af2ba64b346d59bd13c99581346bf349f
 RUN jupyter serverextension enable --py nbgitpuller --sys-prefix
 
+RUN pip install --no-cache git+https://github.com/gedankenstuecke/jupyter-notebook-importer.git@v0.0.2
+RUN jupyter serverextension enable --py oh_notebook_importer --sys-prefix
+
+ENV JH_BUNDLE_REDIRECT http://juno-exploratory.herokuapp.com/shared
+
+RUN pip install --no-cache git+https://github.com/gedankenstuecke/jupyter-bundler-openhumans.git@v0.0.3
+RUN jupyter bundlerextension enable --py oh_bundler
+RUN jupyter nbextension install --py oh_bundler --sys-prefix
+RUN jupyter nbextension enable --py oh_bundler --sys-prefix
+
 # R packages users like to use
 RUN R -e "install.packages(c('stringr', 'tidytext', 'purrr', 'widyr'), repos = 'http://cran.us.r-project.org')"
 
