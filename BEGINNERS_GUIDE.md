@@ -79,4 +79,34 @@ helm upgrade --install --namespace jhub ohjh ohjh --version=v0.1.0 -f secrets.ya
 
 Notice that you need to specify the `secrets.yaml` that needs to be present in the root-directory of this repository! Also the version should match the one in `ohjh/Chart.yaml`.
 
-And that's it. It should deploy the changes and the next time you start a notebook server the changes will be applied! 
+And that's it. It should deploy the changes and the next time you start a notebook server the changes will be applied!
+
+## Restarting stuff
+It can happen ( at least it happened to [@gedankenstuecke](https://www.github.com/gedankenstuecke)) that the whole JupyterHub becomes stuck - either due to an update or just because. To fix this you can use the `kubectl` command on your local machine. You can `delete` pods, they will be restarted by kubernetes.
+
+To see all the pods currently running:
+
+```
+kubectl --namespace=jhub get pod
+```
+
+To get details for a single pod you can use `describe`:
+
+```
+kubectl --namespace=jhub describe pod jupyter-emeadows317
+```
+
+To delete things you can use `delete` along with a `label` that you can see in the output of `describe` (e.g. `app` or `component` etc.)
+
+### Examples
+To delete all `singleuser-server`:
+
+```
+kubectl --namespace=jhub delete pods -l component=singleuser-server
+```
+
+To delete all pods associated with JupyterHub:
+
+```
+kubectl --namespace=jhub delete pods -l app=jupyterhub
+```
