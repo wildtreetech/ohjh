@@ -1,5 +1,7 @@
 jupyterhub:
   proxy:
+    pdb:
+      enabled: false
     service:
       loadBalancerIP: 35.224.161.135
     https:
@@ -9,6 +11,8 @@ jupyterhub:
         contactEmail: accounts+letsencrypt@openhumans.org
 
   hub:
+    pdb:
+      enabled: false
     services:
       refresher:
         admin: true
