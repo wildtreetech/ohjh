@@ -67,7 +67,7 @@ jupyterhub:
           command: ["gitpuller", "https://github.com/OpenHumans/ohjh-example-notebooks", "master", "examples"]
     image:
       name: openhumans/ohjh-singleuser
-      tag: v3
+      tag: v4
     memory:
       limit: 4G
       guarantee: 1G
