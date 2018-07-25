@@ -19,7 +19,7 @@ jupyterhub:
         url: http://refresher/
     image:
       name: betatim/openhumans-hub
-      tag: v7
+      tag: v10
     extraConfig: |
       from tornado import gen
       from kubespawner.spawner import KubeSpawner
@@ -29,6 +29,7 @@ jupyterhub:
           @gen.coroutine
           def pre_spawn_start(self, user, spawner):
               auth_state = yield user.get_auth_state()
+              self.log.error('auth state %s', auth_state)
               spawner.auth_state = auth_state
 
       class OHKubeSpawner(KubeSpawner):
