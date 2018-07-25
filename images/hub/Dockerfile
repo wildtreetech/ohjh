@@ -1,4 +1,4 @@
-FROM ubuntu:17.10
+FROM ubuntu:18.04
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -10,7 +10,6 @@ RUN apt-get update && \
       libcurl4-openssl-dev \
       libssl-dev \
       build-essential \
-      npm \
       && \
     apt-get purge && apt-get clean
 
@@ -27,12 +26,14 @@ RUN adduser --disabled-password \
     --force-badname \
     ${NB_USER}
 
-ARG JUPYTERHUB_VERSION=0.8.*
+ARG JUPYTERHUB_VERSION=0.9.*
 
 ADD requirements.txt /tmp/requirements.txt
 RUN pip3 install --no-cache-dir \
-         https://github.com/jupyterhub/jupyterhub/archive/b26b1bc038029fe6ff790b195591ca48250fdd15.zip#egg=jupyterhub
-RUN pip3 install --no-cache-dir -r /tmp/requirements.txt
+         jupyterhub==${JUPYTERHUB_VERSION} \
+         -r /tmp/requirements.txt
+
+RUN pip3 install --no-cache-dir -U https://github.com/jupyterhub/oauthenticator/archive/fce07d4359583e1726c66621e15029785968b1fd.tar.gz
 
 ADD jupyterhub_config.py /srv/jupyterhub_config.py
 

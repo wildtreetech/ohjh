@@ -1,5 +1,7 @@
 jupyterhub:
   proxy:
+    pdb:
+      enabled: false
     service:
       loadBalancerIP: 35.224.161.135
     https:
@@ -9,13 +11,15 @@ jupyterhub:
         contactEmail: accounts+letsencrypt@openhumans.org
 
   hub:
+    pdb:
+      enabled: false
     services:
       refresher:
         admin: true
         url: http://refresher/
     image:
       name: betatim/openhumans-hub
-      tag: v7
+      tag: v10
     extraConfig: |
       from tornado import gen
       from kubespawner.spawner import KubeSpawner
@@ -25,6 +29,7 @@ jupyterhub:
           @gen.coroutine
           def pre_spawn_start(self, user, spawner):
               auth_state = yield user.get_auth_state()
+              self.log.error('auth state %s', auth_state)
               spawner.auth_state = auth_state
 
       class OHKubeSpawner(KubeSpawner):

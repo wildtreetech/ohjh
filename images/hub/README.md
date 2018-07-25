@@ -10,10 +10,10 @@ use it.
 
 The image is based on https://github.com/jupyterhub/zero-to-jupyterhub-k8s/tree/master/images/hub.
 That image is the official image used in the Zero2JupyterHub guide. We make
-our own because we want to add a service to the image and because we want to
-deploy a version of JupyterHub which has not yet been released.
+our own because we want to use a modified version of oauthenticator which has
+not yet been released.
 
-Once there is a release of v0.9 (~April 2019) we should switch to the standard
+Once there is a release we should switch to the standard
 image, or inherit from it.
 
 
