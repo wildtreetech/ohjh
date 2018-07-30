@@ -2,7 +2,7 @@ FROM jupyter/datascience-notebook:8a1b90cbcba5
 
 # pin jupyterhub to match the Hub version
 # set via `docker build --build-arg ...`
-ARG JUPYTERHUB_VERSION=0.8.1
+ARG JUPYTERHUB_VERSION=0.9.1
 RUN pip install --no-cache jupyterhub==$JUPYTERHUB_VERSION
 
 
