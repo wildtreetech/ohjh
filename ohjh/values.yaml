@@ -13,13 +13,11 @@ jupyterhub:
   hub:
     pdb:
       enabled: false
+    consecutiveFailureLimit: 3
     services:
       refresher:
         admin: true
         url: http://refresher/
-    image:
-      name: betatim/openhumans-hub
-      tag: v10
     extraConfig: |
       from tornado import gen
       from kubespawner.spawner import KubeSpawner
