@@ -1,5 +1,10 @@
 jupyterhub:
   proxy:
+    # manually override kube-lego version until the JupyterHub Chart
+    # also uses this version. Fixes non-renewal of certificates
+    lego:
+      image:
+        tag: 0.1.7
     pdb:
       enabled: false
     service:
