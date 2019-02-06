@@ -32,3 +32,7 @@ RUN pip install --no-cache \
        emoji==0.5.0 \
        open-humans-api==0.2.2
 RUN python -m textblob.download_corpora
+
+RUN conda install --yes -c conda-forge umap-learn multicore-tsne
+RUN conda install --yes -c bioconda pyvcf pysam pbgzip tabix
+RUN conda upgrade --yes -c conda-forge scikit-learn
