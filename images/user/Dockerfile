@@ -16,7 +16,7 @@ RUN jupyter serverextension enable --py nbgitpuller --sys-prefix
 RUN pip install --no-cache git+https://github.com/gedankenstuecke/jupyter-notebook-importer.git@v0.0.2
 RUN jupyter serverextension enable --py oh_notebook_importer --sys-prefix
 
-ENV JH_BUNDLE_REDIRECT http://juno-exploratory.herokuapp.com/shared
+ENV JH_BUNDLE_REDIRECT http://exploratory.openhumans.org/shared
 
 RUN pip install --no-cache git+https://github.com/gedankenstuecke/jupyter-bundler-openhumans.git@v0.0.3
 RUN jupyter bundlerextension enable --py oh_bundler --sys-prefix
