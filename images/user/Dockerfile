@@ -30,7 +30,7 @@ RUN R -e "install.packages(c('stringr', 'tidytext', 'purrr', 'widyr'), repos = '
 RUN pip install --no-cache \
        textblob==0.15.1 \
        emoji==0.5.0 \
-       open-humans-api==0.2.2
+       open-humans-api==0.2.7
 RUN python -m textblob.download_corpora
 
 RUN conda install --yes -c conda-forge umap-learn multicore-tsne
