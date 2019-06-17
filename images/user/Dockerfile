@@ -23,6 +23,17 @@ RUN jupyter bundlerextension enable --py oh_bundler --sys-prefix
 RUN jupyter nbextension install --py oh_bundler --sys-prefix
 RUN jupyter nbextension enable --py oh_bundler --sys-prefix
 
+# install server proxy for voila
+RUN pip install jupyter-server-proxy
+RUN pip install voila
+
+RUN jupyter serverextension disable voila.server_extension
+
+RUN echo "c.ServerProxy.servers = {" >> /etc/jupyter/jupyter_notebook_config.py
+RUN echo "'voila': {" >> /etc/jupyter/jupyter_notebook_config.py
+RUN echo "'command': ['voila', '--port', '{port}', '--server_url', '/', '--base_url', '{base_url}/voila/']}}" >> /etc/jupyter/jupyter_notebook_config.py
+
+
 # R packages users like to use
 RUN R -e "install.packages(c('stringr', 'tidytext', 'purrr', 'widyr'), repos = 'http://cran.us.r-project.org')"
 
@@ -31,7 +42,7 @@ RUN pip install --no-cache \
        textblob==0.15.1 \
        emoji==0.5.0 \
        open-humans-api==0.2.7
-RUN pip install voila
+
 RUN python -m textblob.download_corpora
 
 RUN conda install --yes -c conda-forge umap-learn multicore-tsne
