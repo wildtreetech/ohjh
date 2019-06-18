@@ -28,6 +28,7 @@ RUN pip install jupyter-server-proxy
 RUN pip install voila
 
 RUN jupyter serverextension disable voila.server_extension
+RUN jupyter nbextension disable voila/extension
 
 RUN echo "c.ServerProxy.servers = {" >> /etc/jupyter/jupyter_notebook_config.py
 RUN echo "'voila': {" >> /etc/jupyter/jupyter_notebook_config.py
