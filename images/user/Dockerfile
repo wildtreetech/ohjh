@@ -25,6 +25,7 @@ RUN jupyter nbextension enable --py oh_bundler --sys-prefix
 
 # install server proxy for voila
 RUN pip install jupyter-server-proxy
+RUN pip install pygments --upgrade
 RUN pip install voila
 
 RUN jupyter serverextension disable voila.server_extension
