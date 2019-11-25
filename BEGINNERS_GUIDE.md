@@ -110,3 +110,36 @@ To delete all pods associated with JupyterHub:
 ```
 kubectl --namespace=jhub delete pods -l app=jupyterhub
 ```
+
+
+## Identifying & killing pods used for mining
+
+Once Google Cloud sends an email about a potential abuse of the Hub for mining, you
+might want to find which user is responsible for this. In a first step we need to find
+out the pod-name of our hub itself. This can be done by running:
+
+`kubectl get pods`
+
+In return you will get all pods currently running, including the hub.
+The name of the pod is made up at random, but looks something like
+
+`hub-5f465d499f-2d8pm`
+
+Use this name to grep in the log files to find which users have logged in/started their pods
+at the time the abuse was found:
+
+`kubectl logs hub-5f465d499f-2d8pm | grep " Adding user"`
+
+E.g. you will get a return of the form
+
+```
+[I 2019-11-25 08:17:31.105 JupyterHub proxy:242] Adding user gedankenstuecke to proxy /user/gedankenstuecke/ => http://hub-5f465d499f-2d8pm:56425
+```
+
+Now that you have a list of the usernames you can delete individual user pods like shown above:
+
+```
+kubectl delete pod jupyter-gedankenstuecke
+```
+
+This immediately stops the pod of the user. Ideally you have deactivated that user's Open Humans account prior to this, so that they can't spawn a new one. 
