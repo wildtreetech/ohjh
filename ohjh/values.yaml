@@ -1,10 +1,5 @@
 jupyterhub:
   proxy:
-    # manually override kube-lego version until the JupyterHub Chart
-    # also uses this version. Fixes non-renewal of certificates
-    lego:
-      image:
-        tag: 0.1.7
     pdb:
       enabled: false
     service:
@@ -23,27 +18,28 @@ jupyterhub:
       refresher:
         admin: true
         url: http://refresher/
-    extraConfig: |
-      from tornado import gen
-      from kubespawner.spawner import KubeSpawner
-      from oauthenticator.generic import GenericOAuthenticator
+    extraConfig:
+      customiseSpawner: |
+        from tornado import gen
+        from kubespawner.spawner import KubeSpawner
+        from oauthenticator.generic import GenericOAuthenticator
 
-      class OHAuthenticator(GenericOAuthenticator):
-          @gen.coroutine
-          def pre_spawn_start(self, user, spawner):
-              auth_state = yield user.get_auth_state()
-              self.log.error('auth state %s', auth_state)
-              spawner.auth_state = auth_state
+        class OHAuthenticator(GenericOAuthenticator):
+            @gen.coroutine
+            def pre_spawn_start(self, user, spawner):
+                auth_state = yield user.get_auth_state()
+                self.log.error('auth state %s', auth_state)
+                spawner.auth_state = auth_state
 
-      class OHKubeSpawner(KubeSpawner):
-          def get_env(self):
-              env = super().get_env()
-              oauth_user = self.auth_state['oauth_user']
-              env['OH_PROJECT_MEMBER_ID'] = oauth_user['project_member_id']
-              return env
-      c.JupyterHub.spawner_class = OHKubeSpawner
-      c.JupyterHub.authenticator_class = OHAuthenticator
-      c.Authenticator.enable_auth_state = True
+        class OHKubeSpawner(KubeSpawner):
+            def get_env(self):
+                env = super().get_env()
+                oauth_user = self.auth_state['oauth_user']
+                env['OH_PROJECT_MEMBER_ID'] = oauth_user['project_member_id']
+                return env
+        c.JupyterHub.spawner_class = OHKubeSpawner
+        c.JupyterHub.authenticator_class = OHAuthenticator
+        c.Authenticator.enable_auth_state = True
 
     extraEnv:
       OAUTH2_AUTHORIZE_URL: https://www.openhumans.org/direct-sharing/projects/oauth2/authorize/
@@ -56,6 +52,7 @@ jupyterhub:
     state:
       enabled: true
       cryptoKey: "917d71e3604426b4717a91a9dec85148db0cc23b1dbc7ecd671fedc48d0a90d5"
+
     custom:
       className: 'OHAuthenticator'
       config:

@@ -108,6 +108,7 @@ Change into the helm chart's directory and update the dependencies:
 ```
 cd ohjh/
 helm dep up
+cd ..
 ```
 
 Now you are ready to install the OpenHumans JupyterHub chart:
@@ -123,3 +124,78 @@ Look at the EXTERNAL_IP column. It should either match your static IP if you
 are using one. Otherwise this will be a "random" IP. Use it to reach the cluster
 and if you want to setup a hostname (and SSL) for this cluster go and edit the
 DNS records using this IP.
+
+
+## Upgrade kubernetes version
+
+Every few months a new version of kubernetes is released. Version to version
+the changes tend to be small, but over time they can get big. This means it
+is worth trying to keep up by performing an upgrade every now and again.
+
+There is a dependency between the version of the Zero2JupyterHub helm chart and
+the version of kubernetes. Most of the time this is a non-issue as the range
+of compatibility is very wide. Most of the time it will be the case that the
+helm chart isn't yet compatible with the super latest and greatest version
+of kubernetes. Not the other way around. However GKE lags behind the "super
+latest and greates k8s version" by a bit.
+
+Overall this means that there should be no issues but worth keeping at the
+back of your mind. The place to check is the zero2jupyterhub repository,
+changelog there and issues.
+
+
+### Upgrade the kubernetes master
+
+Use https://console.cloud.google.com/kubernetes/clusters/details/us-central1-b/jhub
+to upgrade the "Master version". Typically go for the latest version that
+the uI will let you select. This will lead to a few minutes of "k8s control
+plane downtime". This means new users won't be able to start their servers.
+Existing users will continue to be able to use their servers but not stop
+them.
+
+### Upgrade the kubernetes worker nodes
+
+After ugprading the master you can upgrade the version of kubernetes on the
+worker nodes. We do this by creating a new node pool and then deleting the
+old one. You can get a list of all node pools (there should only be one)
+with `gcloud container node-pools list --cluster=jhub --zone=us-central1-b`
+
+```
+# old_pool is the name of the pool that we are replacing
+old_pool=<name-of-old-pool
+# new_pool is the name our new pool will have. It must be different
+new_pool=pool-$(date +"%Y%m%d")
+
+gcloud --project=open-humans-jupyterhub container node-pools create $new_pool \
+    --cluster=jhub \
+    --disk-size=100 \
+    --machine-type=n1-standard-2 \
+    --enable-autorepair \
+    --num-nodes=2 \
+    --zone=us-central1-b \
+    --min-nodes=2 \
+    --max-nodes=10 \
+    --enable-autoscaling
+```
+
+Now it is time to slowly move all running pods over to the new node pool.
+You can do this slowly or quickly. Slow means running the old node pool until
+the last user pod on it has been stopped voluntarily. Quick means forcing
+all user pods to stop. Which is better/suitable depends on number of users,
+SLA, etc.
+
+The start is the same in both cases: we want to close the old nodes to new
+traffic.
+```
+# for each node in the old node pool
+kubectl cordon $node
+```
+Cordon one node at a time, check things continue to work, move pods that need
+to be moved manually from that node. For example the `hub` pod will need to
+be manually migrated over to the new node pool. This is achieved by deleting
+the pod and it should automatically restart on one of the new nodes (technically
+it can come back on any uncordoned node, including an old one).
+
+```
+kubectl delete pod <HUB-POD-NAME>
+```
