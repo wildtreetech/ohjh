@@ -13,7 +13,7 @@ RUN jupyter serverextension enable --py jhoauthrefresh --sys-prefix
 RUN pip install --no-cache git+https://github.com/jupyterhub/nbgitpuller@06d28289324bf480a7c66ff0cfc336bbe4da63b6
 RUN jupyter serverextension enable --py nbgitpuller --sys-prefix
 
-RUN pip install --no-cache git+https://github.com/gedankenstuecke/jupyter-notebook-importer.git@v0.0.3
+RUN pip install --no-cache git+https://github.com/gedankenstuecke/jupyter-notebook-importer.git@v0.0.4
 RUN jupyter serverextension enable --py oh_notebook_importer --sys-prefix
 
 ENV JH_BUNDLE_REDIRECT http://exploratory.openhumans.org/shared
