@@ -30,7 +30,15 @@ RUN pip install --no-cache --upgrade \
     voila \
     textblob==0.15.1 \
     emoji==0.5.0 \
-    open-humans-api==0.2.7
+    open-humans-api==0.2.7 \ 
+    geojson \
+    geopy \
+    ipyleaflet \
+    ipympl \
+    python-geohash \
+    geopandas \
+    openlocationcode \
+    osm2geojson 
 
 RUN python -m textblob.download_corpora
 
