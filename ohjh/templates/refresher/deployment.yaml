@@ -1,4 +1,4 @@
-apiVersion: apps/v1beta2
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: token-refresher
@@ -24,7 +24,7 @@ spec:
         volumeMounts:
           - mountPath: /etc/jupyterhub/config/
             name: hub-config
-        image: betatim/openhumans-refresher:v13
+        image: betatim/openhumans-refresher:v14
         ports:
         - containerPort: 80
         env:
