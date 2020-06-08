@@ -34,7 +34,7 @@ RUN pip install --no-cache --upgrade \
 
 RUN python -m textblob.download_corpora
 
-RUN echo "c.ServerProxy.servers = {" >> /etc/jupyter/jupyter_notebook_config.py
+RUN echo "\nc.ServerProxy.servers = {" >> /etc/jupyter/jupyter_notebook_config.py
 RUN echo "'voila': {" >> /etc/jupyter/jupyter_notebook_config.py
 RUN echo "'command': ['voila', '--port', '{port}', '--server_url', '/', '--base_url', '{base_url}/voila/']}}" >> /etc/jupyter/jupyter_notebook_config.py
 
